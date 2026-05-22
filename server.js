@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const db = require('./db');          // SQLite setup (safe-bip.db, responses table)
+const db = require('./db');          // better-sqlite3 database
 const questions = require('./questions'); // Your questions.js
 
 app.use(express.urlencoded({ extended: true })); // For Twilio form-encoded POSTs
@@ -61,13 +61,9 @@ app.post('/ivr/save-answer', (req, res) => {
   console.log(`Answer for Q${qId} (session ${sessionId}): ${digit}`);
 
   // Store the numeric answer
-  db.run(
-    `INSERT INTO responses (session_id, question_id, answer) VALUES (?, ?, ?)`,
-    [sessionId, qId, digit],
-    (err) => {
-      if (err) console.error('DB Insert Error:', err);
-    }
-  );
+  db.prepare(
+    `INSERT INTO responses (session_id, question_id, answer) VALUES (?, ?, ?)`
+  ).run(sessionId, qId, digit);
 
   const twiml = `
     <Response>
@@ -97,13 +93,9 @@ app.post('/ivr/save-why', (req, res) => {
   console.log(`Why for Q${qId} (session ${sessionId}): ${recordingUrl}`);
 
   // Attach recording URL to the existing response row
-  db.run(
-    `UPDATE responses SET recording_url = ? WHERE session_id = ? AND question_id = ?`,
-    [recordingUrl, sessionId, qId],
-    (err) => {
-      if (err) console.error('DB Update Error (recording):', err);
-    }
-  );
+  db.prepare(
+    `UPDATE responses SET recording_url = ? WHERE session_id = ? AND question_id = ?`
+  ).run(recordingUrl, sessionId, qId);
 
   const current = getQuestion(qId);
 
@@ -141,13 +133,9 @@ app.post('/ivr/transcription', (req, res) => {
 
   console.log(`Transcription for Q${qId} (session ${sessionId}): ${transcription}`);
 
-  db.run(
-    `UPDATE responses SET transcription = ? WHERE session_id = ? AND question_id = ?`,
-    [transcription, sessionId, qId],
-    (err) => {
-      if (err) console.error('DB Update Error (transcription):', err);
-    }
-  );
+  db.prepare(
+    `UPDATE responses SET transcription = ? WHERE session_id = ? AND question_id = ?`
+  ).run(transcription, sessionId, qId);
 
   // Twilio doesn't need TwiML back here
   res.sendStatus(200);
