@@ -16,6 +16,12 @@ app.get('/', (req, res) => {
   res.send('SafeBIP IVR backend is running.');
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
+
 // ------------------------------------------------------------
 // 1. START OF CALL — Twilio GET /ivr/start
 // ------------------------------------------------------------
@@ -38,6 +44,7 @@ app.get('/ivr/start', (req, res) => {
       input="dtmf" 
       numDigits="1" 
       action="https://safe-bip-ivr.onrender.com/ivr/save-answer?q=${q.id}"
+      method="POST"
     >
       <Say>${q.text}</Say>
       <Say>For A, press 1. ${q.options.A}</Say>
@@ -74,6 +81,7 @@ app.post('/ivr/save-answer', (req, res) => {
   <Response>
     <Say>Why did you answer that way? Press pound when you are finished speaking.</Say>
     <Record
+      method="POST"
       maxLength="30"
       timeout="3"
       playBeep="true"
@@ -125,7 +133,7 @@ const nextId = current.next;
 
 const twiml = `
   <Response>
-    <Redirect>https://safe-bip-ivr.onrender.com/ivr/start?q=${nextId}</Redirect>
+    <Redirect method="GET">https://safe-bip-ivr.onrender.com/ivr/start?q=${nextId}</Redirect>
   </Response>
 `;
 
