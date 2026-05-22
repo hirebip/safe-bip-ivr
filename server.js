@@ -20,6 +20,17 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+// TEMP DEBUG: Show absolute DB path
+app.get('/debug/db-path', (req, res) => {
+  const path = require('path');
+  res.send(path.resolve('./safe-bip.db'));
+});
+
+// TEMP DEBUG: Download the actual DB file
+app.get('/debug/download-db', (req, res) => {
+  res.download('./safe-bip.db');
+});
+
 
 
 // ------------------------------------------------------------
