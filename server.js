@@ -115,17 +115,18 @@ app.post('/ivr/save-why', (req, res) => {
     return res.send(twiml);
   }
 
-  // Otherwise → go to next question
-  const nextId = current.next;
+ // Otherwise → go to next question
+const nextId = current.next;
 
-  const twiml = `
-    <Response>
-      <Redirect>/ivr/start?q=${nextId}</Redirect>
-    </Response>
-  `;
+const twiml = `
+  <Response>
+    <Redirect>https://safe-bip-ivr.onrender.com/ivr/start?q=${nextId}</Redirect>
+  </Response>
+`;
 
-  res.type('text/xml');
-  res.send(twiml);
+res.type('text/xml');
+res.send(twiml);
+
 });
 
 // ------------------------------------------------------------
