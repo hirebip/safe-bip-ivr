@@ -52,19 +52,20 @@ app.get('/ivr/start', (req, res) => {
   const twiml = `
   <Response>
     <Gather 
-      input="dtmf" 
-      numDigits="1" 
-      action="https://safe-bip-ivr.onrender.com/ivr/save-answer?q=${q.id}"
-      method="POST"
-    >
-      <Say>${q.text}</Say>
-      <Say>For A, press 1. ${q.options.A}</Say>
-      <Say>For B, press 2. ${q.options.B}</Say>
-      <Say>For C, press 3. ${q.options.C}</Say>
-      <Say>For D, press 4. ${q.options.D}</Say>
-      <Say>For E, press 5. ${q.options.E}</Say>
-    </Gather>
-    <Say>No input received. Goodbye.</Say>
+  input="dtmf" 
+  numDigits="1" 
+  action="https://safe-bip-ivr.onrender.com/ivr/save-answer?q=${q.id}"
+  method="POST"
+>
+  <Say bargeIn="true">${q.text}</Say>
+  <Say bargeIn="true">For A, press 1. ${q.options.A}</Say>
+  <Say bargeIn="true">For B, press 2. ${q.options.B}</Say>
+  <Say bargeIn="true">For C, press 3. ${q.options.C}</Say>
+  <Say bargeIn="true">For D, press 4. ${q.options.D}</Say>
+  <Say bargeIn="true">For E, press 5. ${q.options.E}</Say>
+</Gather>
+<Say>No input received. Goodbye.</Say>
+
   </Response>
 `;
 
