@@ -69,7 +69,10 @@ app.post('/ivr/save-answer', (req, res) => {
   <Response>
     <Say>Why did you answer that way? Press pound when you are finished speaking.</Say>
     <Record
-      maxLength="20"
+      maxLength="30"
+      timeout="3"
+      playBeep="true"
+      trim="do-not-trim"
       finishOnKey="#"
       action="https://safe-bip-ivr.onrender.com/ivr/save-why?q=${qId}"
       transcribe="true"
@@ -77,6 +80,7 @@ app.post('/ivr/save-answer', (req, res) => {
     />
   </Response>
 `;
+
 
 
   res.type('text/xml');
