@@ -33,18 +33,23 @@ app.get('/ivr/start', (req, res) => {
   }
 
   const twiml = `
-    <Response>
-      <Gather input="dtmf" numDigits="1" action="/ivr/save-answer?q=${q.id}">
-        <Say>${q.text}</Say>
-        <Say>For A, press 1. ${q.options.A}</Say>
-        <Say>For B, press 2. ${q.options.B}</Say>
-        <Say>For C, press 3. ${q.options.C}</Say>
-        <Say>For D, press 4. ${q.options.D}</Say>
-        <Say>For E, press 5. ${q.options.E}</Say>
-      </Gather>
-      <Say>No input received. Goodbye.</Say>
-    </Response>
-  `;
+  <Response>
+    <Gather 
+      input="dtmf" 
+      numDigits="1" 
+      action="https://safe-bip-ivr.onrender.com/ivr/save-answer?q=${q.id}"
+    >
+      <Say>${q.text}</Say>
+      <Say>For A, press 1. ${q.options.A}</Say>
+      <Say>For B, press 2. ${q.options.B}</Say>
+      <Say>For C, press 3. ${q.options.C}</Say>
+      <Say>For D, press 4. ${q.options.D}</Say>
+      <Say>For E, press 5. ${q.options.E}</Say>
+    </Gather>
+    <Say>No input received. Goodbye.</Say>
+  </Response>
+`;
+
 
   res.type('text/xml');
   res.send(twiml);
