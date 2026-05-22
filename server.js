@@ -66,17 +66,18 @@ app.post('/ivr/save-answer', (req, res) => {
   ).run(sessionId, qId, digit);
 
   const twiml = `
-    <Response>
-      <Say>Why did you answer that way? Press pound when you are finished speaking.</Say>
-      <Record
-        maxLength="20"
-        finishOnKey="#"
-        action="/ivr/save-why?q=${qId}"
-        transcribe="true"
-        transcribeCallback="/ivr/transcription?q=${qId}"
-      />
-    </Response>
-  `;
+  <Response>
+    <Say>Why did you answer that way? Press pound when you are finished speaking.</Say>
+    <Record
+      maxLength="20"
+      finishOnKey="#"
+      action="https://safe-bip-ivr.onrender.com/ivr/save-why?q=${qId}"
+      transcribe="true"
+      transcribeCallback="https://safe-bip-ivr.onrender.com/ivr/transcription?q=${qId}"
+    />
+  </Response>
+`;
+
 
   res.type('text/xml');
   res.send(twiml);
